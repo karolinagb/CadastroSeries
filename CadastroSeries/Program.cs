@@ -23,13 +23,13 @@ namespace CadastroSeries
                         InserirSerie();
                         break;
                     case "3":
-                        //AtualizarSerie();
+                        AtualizarSerie();
                         break;
                     case "4":
-                        //ExcluirSerie();
+                        ExcluirSerie();
                         break;
                     case "5":
-                        //VisualizarSerie();
+                        VisualizarSerie();
                         break;
                     case "C":
                         Console.Clear();
@@ -92,6 +92,56 @@ namespace CadastroSeries
                 entradaTitulo, entradaDescricao, entradaAno);
 
             repository.Insert(novaSerie);
+        }
+
+        private static void AtualizarSerie()
+        {
+            Console.Write("Digite o id da série: ");
+            int indiceSerie = int.Parse(Console.ReadLine());
+
+            // https://docs.microsoft.com/pt-br/dotnet/api/system.enum.getvalues?view=netcore-3.1
+            // https://docs.microsoft.com/pt-br/dotnet/api/system.enum.getname?view=netcore-3.1
+            foreach (int i in Enum.GetValues(typeof(Genero)))
+            {
+                Console.WriteLine("{0}-{1}", i, Enum.GetName(typeof(Genero), i));
+            }
+            Console.Write("Digite o gênero entre as opções acima: ");
+            int entradaGenero = int.Parse(Console.ReadLine());
+
+            Console.Write("Digite o Título da Série: ");
+            string entradaTitulo = Console.ReadLine();
+
+            Console.Write("Digite o Ano de Início da Série: ");
+            int entradaAno = int.Parse(Console.ReadLine());
+
+            Console.Write("Digite a Descrição da Série: ");
+            string entradaDescricao = Console.ReadLine();
+
+            Serie atualizaSerie = new Serie(id: indiceSerie,
+                                        genero: (Genero)entradaGenero,
+                                        titulo: entradaTitulo,
+                                        ano: entradaAno,
+                                        descricao: entradaDescricao);
+
+            repository.Update(indiceSerie, atualizaSerie);
+        }
+
+        private static void ExcluirSerie()
+        {
+            Console.Write("Digite o id da série: ");
+            int indiceSerie = int.Parse(Console.ReadLine());
+
+            repository.Delete(indiceSerie);
+        }
+
+        private static void VisualizarSerie()
+        {
+            Console.Write("Digite o id da série: ");
+            int indiceSerie = int.Parse(Console.ReadLine());
+
+            var serie = repository.GetById(indiceSerie);
+
+            Console.WriteLine(serie);
         }
 
         private static string ObterOpcaoUsuario()
